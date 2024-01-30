@@ -1,0 +1,15 @@
+search from db(case2_cmd_injection_victim2) where
+e1{cmdline like 'password_in_files.txt', type=process},
+e2{type=process}
+with e1->e2
+return * as poi;
+
+bg = back track poi from db(case2_cmd_injection_victim2);
+
+search from db(case2_cmd_injection_victim2) where
+e1{srcip like '172.16.158.131', srcport=55076, type=network},
+e2{exename like 'sshd', type=process}
+with e1->e2
+return * as entry;
+
+fg = forward track entry from db(case2_cmd_injection_victim2) exclude edges where optype = 'accept' limit step 2;

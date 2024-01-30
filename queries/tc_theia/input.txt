@@ -1,0 +1,7 @@
+bg = back track where
+(path = '/run/shm/lc')
+from db(theia) limit step 2;
+
+fg = forward track where
+(dstip = '189.141.204.211' or dstip like '208.203.20.42')
+from bg;

@@ -1,0 +1,15 @@
+search from db(case2_shellshock_password_crack_victim1) where
+e1{cmdline like 'john.tar.xz', type=process},
+e2{type=process}
+with e1->e2
+return * as poi;
+
+bg = back track poi from db(case2_shellshock_password_crack_victim1);
+
+search from db(case2_shellshock_password_crack_victim1) where
+e1{cmdline like 'john', type=process},
+e2{type=network}
+with e2->e1
+return * as entry;
+
+fg = forward track entry from db(case2_shellshock_password_crack_victim1) exclude edges where optype='read' or optype='accept' limit step 2;

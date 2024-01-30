@@ -1,0 +1,15 @@
+search from db(case2_wannacry) where
+e1{srcip like '172.16.158.145', type=network},
+e2{exename like "svchost.exe",type=process}
+with e2->e1
+return * as poi;
+
+bg = back track poi from db(case2_wannacry);
+
+search from db(case2_wannacry) where
+e1{exename like "WannaCry.exe",type=process},
+e2{type=process}
+with e2->e1
+return * as entry;
+
+fg = forward track entry from db(case2_wannacry) exclude nodes where (id=504);

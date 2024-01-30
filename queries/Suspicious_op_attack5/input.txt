@@ -1,0 +1,25 @@
+search from db(case4_attack5) where
+e1{cmdline like ".garbage",type=process},
+e2{type=process},
+e3{type=process}
+with e2->e1 &&[<100s]
+e1->e3
+return * as poi;
+
+bg = back track poi from db(case4_attack5) exclude nodes where exename like 'touch' limit step 1;
+
+search from db(case4_attack5) where
+e1{srcport=59048, type=network},
+e2{pid=129001, type=process},
+e3{pid=129002, type=process}
+with e1->e2 &&[<100s]
+e2->e3
+return * as entry1;
+
+search from db(case4_attack5) where
+e1{pid=129001, type=process},
+e2{pid=129002, type=process}
+with e1->e2
+return * as entry;
+
+fg = forward track entry from db(case4_attack5) exclude nodes where (exename like 'locale' or exename like 'ls') limit step 3;

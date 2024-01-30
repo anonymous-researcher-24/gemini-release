@@ -1,0 +1,7 @@
+bg = back track where
+(path like 'passwd')
+from db(fivedirections2) limit step 2;
+
+fg = forward track where
+(dstip = '128.55.12.167/32' and ( dstport = 8640 or dstport = 8641))
+from db(fivedirections2) limit step 3;

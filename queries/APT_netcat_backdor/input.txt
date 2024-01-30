@@ -1,0 +1,17 @@
+search from db(case2_netcat_backdoor) where
+e1{path like 'nc.exe', type=file},
+e2{exepath like 'Zoom.exe', type=process}
+with e2->e1
+return * as poi;
+
+bg = back track poi from db(case2_netcat_backdoor);
+
+search from db(case2_netcat_backdoor) where
+e1{exepath like 'Zoom.exe', type=process},
+e2{srcip like '172.16.158.145', srcport=50026, type=network}
+with e2->e1
+return * as entry;
+
+entry = forward track entry from db(case2_netcat_backdoor) exclude edges where (id != 3691) limit step 1;
+
+fg = forward track entry from db(case2_netcat_backdoor) exclude nodes where (exename like 'dll' or exename like 'cmd') limit step 1;

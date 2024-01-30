@@ -1,0 +1,11 @@
+bg = back track where
+(cmdline like 'freemem.sh', type=process)
+from db(case2_supply_chain);
+
+search from bg where
+e1{pid=9090, type=process},
+e2{type=process}
+with e1->e2
+return * as entry;
+
+fg = forward track entry from db(case2_supply_chain);

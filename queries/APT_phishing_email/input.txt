@@ -1,0 +1,11 @@
+bg = back track where
+(dstip like '172.16.158.145' or srcip like '172.16.158.145', type=network)
+from db(case2_phishing_email);
+
+search from bg where
+e1{pid=804, type=process},
+e2{path like 'phishing'}
+with e1->e2
+return * as entry;
+
+fg = forward track entry from bg exclude nodes where (path like 'dll' or path like 'dat' or path like 'dotm' or path like 'DLL' or path like 'ini' or path like 'Temp' or path like 'Office') limit step 1;

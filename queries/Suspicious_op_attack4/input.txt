@@ -1,0 +1,15 @@
+search from db(case4_attack4) where
+e1{cmdline like "hide_bdoor",type=process},
+e2{type=process}
+with e1->e2
+return * as poi;
+
+bg = back track poi from db(case4_attack4);
+
+search from db(case4_attack4) where
+e1{exename like "python3", pid=592722, type=process},
+e2{exename!='ping', type=process}
+with e1->e2
+return * as entry;
+
+fg = forward track entry from db(case4_attack4) exclude nodes where exename like 'ping' limit step 3;

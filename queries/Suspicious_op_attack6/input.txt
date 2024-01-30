@@ -1,0 +1,15 @@
+search from db(case4_attack6) where
+e1{cmdline like 'authorized_keys', type=process},
+e2{type=process}
+with e1->e2
+return * as poi;
+
+bg = back track poi from db(case4_attack6);
+
+search from bg where
+e1{exename like "ssh",pid=155008,type=process},
+e2{pid=155009,type=process}
+with e1->e2
+return * as entry;
+
+fg = forward track entry from db(case4_attack6) exclude nodes where (exename like 'locale' or exename like 'ls' or exename like 'date');

@@ -1,0 +1,17 @@
+search from db(case2_shellshock_data_leakage_victim1) where
+e1{cmdline like 'bash', type=process},
+e2{exename like 'curl', type=process}
+with e1->e2
+return * as poi;
+
+bg = back track poi from db(case2_shellshock_data_leakage_victim1);
+
+search from db(case2_shellshock_data_leakage_victim1) where
+e1{exename like 'env.cgi', pid=124053, type=process},
+e2{exename like 'lighttpd', type=process},
+e3{pid=124054, type=process}
+with e2->e1 &&[<100s]
+e3->e1
+return * as entry;
+
+fg = forward track entry from db(case2_shellshock_data_leakage_victim1) exclude nodes where (exename like 'bzip2' or exename like 'gpg' or exename like 'tar' or exename like 'ls' or exename like 'cat' or exename like 'ssh' or exename like 'scp' or pid = 124035 or pid = 124040 or pid = 124006) limit step 6;

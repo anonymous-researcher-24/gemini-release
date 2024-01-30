@@ -1,0 +1,15 @@
+search from db(case4_attack10) where
+e1{cmdline like 'fake_scores.txt', type=process},
+e2{type=process}
+with e1->e2
+return * as poi;
+
+bg = back track poi from db(case4_attack10) exclude nodes where exename like '<UNKNOWN>';
+
+search from db(case4_attack10) where
+e1{cmdline like '/midterm/scores.txt',type=process},
+e2{pid=46714,type=process}
+with e1->e2
+return * as entry;
+
+fg = forward track entry from db(case4_attack10);

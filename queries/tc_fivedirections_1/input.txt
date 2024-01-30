@@ -1,0 +1,11 @@
+bg = back track where
+(cmdline like 'systeminfo' and pid = 6568, type=process)
+from db(fivedirections) exclude edges where optype = 'ReadFile' limit step 2;
+
+search from bg where
+e1{pid=8072, type=process},
+e2{type=file}
+with e1->e2
+return * as entry;
+
+fg = forward track entry from bg exclude nodes where type = 'network' and srcip = '0.0.0.0/8' limit step 3;

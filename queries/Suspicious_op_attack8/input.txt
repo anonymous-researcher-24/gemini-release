@@ -1,0 +1,13 @@
+bg = back track where
+(cmdline like '172.16.158.', type=process)
+from db(case4_attack8) exclude edges where optype = 'read';
+
+search from bg where
+e1{exename like 'python3',type=process},
+e2{exename='sh', type=process},
+e3{exename like "nmap",type=process}
+with e1->e2 &&[<100s]
+e2->e3
+return * as entry;
+
+fg = forward track entry from bg;

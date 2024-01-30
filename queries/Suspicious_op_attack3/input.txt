@@ -1,0 +1,15 @@
+search from db(case4_attack3) where
+e1{cmdline like "file1_rename.txt",type=process},
+e2{type=process}
+with e1->e2
+return * as poi;
+
+bg = back track poi from db(case4_attack3);
+
+search from db(case4_attack3) where
+e1{exename like "python3", pid=591565, type=process},
+e2{exename!='ping', type=process}
+with e1->e2
+return * as entry;
+
+fg = forward track entry from db(case4_attack3) exclude nodes where exename like 'ls' limit step 2;

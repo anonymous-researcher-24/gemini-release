@@ -1,0 +1,11 @@
+bg = back track where
+(cmdline like '/etc/passwd' or cmdline like '/etc/shadow', type=process)
+from db(case4_attack9) exclude edges where optype = 'read';
+
+search from bg where
+e1{pid=5387,type=process},
+e2{pid=5388,type=process}
+with e1->e2
+return * as entry;
+
+fg = forward track entry from bg;

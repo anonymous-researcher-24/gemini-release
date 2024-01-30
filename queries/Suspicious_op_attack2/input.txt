@@ -1,0 +1,17 @@
+search from db(case4_attack2) where
+e1{cmdline like "write_random_data",type=process},
+e2{type=process}
+with e1->e2
+return * as poi;
+
+bg = back track poi from db(case4_attack2) exclude nodes where exename like 'ping';
+
+entry_graph = forward track poi from db(case4_attack2);
+
+search from db(case4_attack2) where
+e1{pid=590094, cmdline like "wget",type=process},
+e2{type=process}
+with e1->e2
+return * as entry;
+
+fg = forward track entry from db(case4_attack2);

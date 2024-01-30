@@ -1,0 +1,19 @@
+search from db(case4_attack1) where
+e1{exename like "write_random", type=process},
+e2{exename like "sh", type=process},
+e3{exename like "python3", type=process}
+with e1->e2 &&[<1s]
+e2->e3
+return * as poi;
+
+bg = back track poi from db(case4_attack1);
+
+entry_graph = forward track poi from db(case4_attack1);
+
+search from db(case4_attack1) where
+e1{exename like "wget",type=process},
+e2{type=file}
+with e1->e2
+return * as entry;
+
+fg = forward track entry from db(case4_attack1);
